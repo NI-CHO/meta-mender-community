@@ -3,13 +3,7 @@
 Mender integration for Toradex NXP boards
 
 The supported and tested boards are:
-
-- [Toradex Apalis iMX6](https://hub.mender.io/c/board-integrations/)
-- [Toradex Apalis iMX8](https://hub.mender.io/c/board-integrations/)
-- [Toradex Colibri iMX6ULL](https://hub.mender.io/c/board-integrations/)
-- [Toradex Colibri iMX8X](https://hub.mender.io/c/board-integrations/)
-- [Toradex Verdin iMX8M Mini](https://hub.mender.io/c/board-integrations/)
-- [Toradex Verdin iMX8M Plus](https://hub.mender.io/c/board-integrations/)
+- Toradex Apalis iMX8
 
 Visit the individual board links above for more information on status of the
 integration and more detailed instructions on how to build and use images
@@ -20,8 +14,8 @@ together with Mender for the mentioned boards.
 This layer depends on:
 
 ```
-URI: https://git.yoctoproject.org/git/poky
-branch: scarthgap
+URI: https://git.toradex.com/meta-toradex-nxp.git
+branch: scarthgap-7.x.y
 revision: HEAD
 ```
 
@@ -32,43 +26,42 @@ branch: scarthgap
 revision: HEAD
 ```
 
-```
-URI: https://git.toradex.com/meta-toradex-nxp.git
-branch: scarthgap-7.x.y
-revision: HEAD
-```
-
-```
-URI: https://git.toradex.com/meta-toradex-bsp-common.git
-branch: scarthgap-7.x.y
-revision: HEAD
-```
-
-```
-URI: https://git.toradex.com/meta-toradex-distro.git
-branch: scarthgap-7.x.y
-revision: HEAD
-```
-
-```
-URI: https://github.com/Freescale/meta-freescale.git
-branch: scarthgap
-revision: HEAD
-```
-
-```
-URI: https://git.openembedded.org/meta-openembedded
-branch: scarthgap
-revision: HEAD
-```
-
 ## Quick start
 
-See the top level [README](../README.md) for instructions to build using the `kas` tool. Supported configurations are:
+The following commands will setup the environment and allow you to build images
+that have Mender integrated.
 
-- [`apalis-imx6.yml`](../kas/apalis-imx6.yml)
-- [`apalis-imx8.yml`](../kas/apalis-imx8.yml)
-- [`colibri-imx6ull.yml`](../kas/colibri-imx6ull.yml)
-- [`colibri-imx8x.yml`](../kas/colibri-imx8x.yml)
-- [`verdin-imx8mm.yml`](../kas/verdin-imx8mm.yml)
-- [`verdin-imx8mp.yml`](../kas/verdin-imx8mp.yml)
+
+```
+mkdir mender-toradex && cd mender-toradex
+
+# Select the appropriate Toradex BSP version:
+export TORADEX_BSP_VERSION=7.1.0
+
+repo init -u https://git.toradex.com/toradex-manifest.git \
+    -b refs/tags/${TORADEX_BSP_VERSION} \
+    -m tdxref/default.xml
+
+wget --directory-prefix .repo/local_manifests \
+    https://raw.githubusercontent.com/mendersoftware/meta-mender-community/kirkstone/scripts/mender-no-setup-layers.xml
+
+repo sync
+
+. ./export
+
+echo "BBLAYERS += \" \${TOPDIR}/../layers/meta-mender/meta-mender-core \"" >> conf/bblayers.conf
+echo "BBLAYERS += \" \${TOPDIR}/../layers/meta-mender-community/meta-mender-toradex-nxp \"" >> conf/bblayers.conf
+
+# Omit this, if you intend to use this build in production
+echo "BBLAYERS += \" \${TOPDIR}/../layers/meta-mender/meta-mender-demo \"" >> conf/bblayers.conf
+
+cat ../layers/meta-mender-community/templates/local.conf.append >> conf/local.conf
+cat ../layers/meta-mender-community/meta-mender-toradex-nxp/templates/local.conf.append >> conf/local.conf
+
+echo "TORADEX_BSP_VERSION = \"toradex-bsp-${TORADEX_BSP_VERSION}\"" >> conf/local.conf
+
+You need to accept the Freescale EULA at ‘…/sources/meta-freescale/EULA’. Please read it and in case you accept it, run:
+echo "ACCEPT_FSL_EULA = \"1\"" >> conf/local.conf 
+
+MACHINE=blah bitbake tdx-reference-minimal-image
+```
