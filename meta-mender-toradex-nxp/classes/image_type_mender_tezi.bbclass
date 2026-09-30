@@ -169,4 +169,4 @@ IMAGE_CMD:mender_tezi () {
 do_image_mender_tezi[dirs] += "${WORKDIR}/image-json ${DEPLOY_DIR_IMAGE}"
 do_image_mender_tezi[cleandirs] += "${WORKDIR}/image-json"
 do_image_mender_tezi[prefuncs] += "rootfs_mender_tezi_json"
-IMAGE_TYPEDEP:mender_tezi[vardepsexclude] = "SRCDATE"
+rootfs_mender_tezi_json[vardepsexclude] += "SRCDATE DATE DATETIME"
