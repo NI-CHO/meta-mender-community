@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mender Community <community@mender.io>
+Date: Mon, 22 Sep 2026 00:00:00 +0000
+Subject: [PATCH] Use mender_dtb_name for fdtfile
+
+Let Mender control which device tree is loaded by setting fdtfile from
+the mender_dtb_name variable provided by the Mender U-Boot environment.
+
+Signed-off-by: Mender Community <community@mender.io>
+---
+ configs/apalis-imx8_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/apalis-imx8_defconfig b/configs/apalis-imx8_defconfig
+--- a/configs/apalis-imx8_defconfig
++++ b/configs/apalis-imx8_defconfig
+@@ -30,7 +30,7 @@ CONFIG_DISTRO_DEFAULTS=y
+ CONFIG_BOOTDELAY=1
+ CONFIG_OF_SYSTEM_SETUP=y
+ CONFIG_USE_PREBOOT=y
+-CONFIG_PREBOOT="test -n ${fdtfile} || setenv fdtfile ${soc}-apalis${variant}-${fdt_board}.dtb"
++CONFIG_PREBOOT="setenv fdtfile ${mender_dtb_name}"
+ CONFIG_SYS_CBSIZE=2048
+ CONFIG_SYS_PBSIZE=2068
+ CONFIG_LOG=y
+-- 
+2.44.3
+

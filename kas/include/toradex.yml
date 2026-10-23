@@ -47,4 +47,4 @@ local_conf_header:
     KERNEL_IMAGETYPE:aarch64_mender-grub = "Image"
     IMAGE_BOOT_FILES:remove:mender-grub = "boot.scr-verdin-imx8mm;boot.scr"
     IMAGE_BOOT_FILES:remove:mender-uboot = "zImage ${KERNEL_DEVICETREE} overlays.txt overlays/*;overlays/"
-    TORADEX_BSP_VERSION = "toradex-bsp-7.1.0"
+    TORADEX_BSP_VERSION = "toradex-bsp-7.8.0"

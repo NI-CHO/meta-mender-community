@@ -36,7 +36,7 @@ that have Mender integrated.
 mkdir mender-toradex && cd mender-toradex
 
 # Select the appropriate Toradex BSP version:
-export TORADEX_BSP_VERSION=7.1.0
+export TORADEX_BSP_VERSION=7.8.0
 
 repo init -u https://git.toradex.com/toradex-manifest.git \
     -b refs/tags/${TORADEX_BSP_VERSION} \
